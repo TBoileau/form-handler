@@ -352,7 +352,7 @@ class DefaultController extends AbstractController
         
         // If the manager has tested the validity of the form and processed your logic
         if($formManager->hasSucceeded()) {
-            // Put your logic here, like a redirection
+            // Return a response like a redirection
         }
         
         return $this->render('default/index.html.twig', [
