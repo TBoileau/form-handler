@@ -37,5 +37,5 @@ script:
     - composer validate --strict --no-check-lock
     # simple-phpunit is the PHPUnit wrapper provided by the PHPUnit Bridge component and
     # it helps with testing legacy code and deprecations (composer require symfony/phpunit-bridge)
-    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS ./tests/
+    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS ./src/Tests/
     - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
