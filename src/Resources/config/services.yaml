@@ -1,0 +1,12 @@
+services:
+    TBoileau\FormHandlerBundle\Factory\FormManagerFactoryInterface: '@tboileau.form_handler.manager_factory'
+    tboileau.form_handler.manager_factory:
+        class: TBoileau\FormHandlerBundle\Factory\FormManagerFactory
+        arguments:
+            - '@form.factory'
+            -
+
+    TBoileau\FormHandlerBundle\Maker\FormHandlerMaker:
+        arguments: ["@maker.file_manager"]
+        tags:
+            - { name: maker.command }
