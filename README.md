@@ -51,8 +51,6 @@ $ php bin/console make:form-handler NameOfYourHandler NameOfYourFormType
 - `NameOfYourHandler` : Enter the name of your new form handler, without namespace and `Handler` suffix.
 - `NameOfYourFormType` : Enter the name with namespace of your form type.
 
-If he doesn't find the form type, you will have 3 attemps for enter a new one.
-
 **The maker will generate your new form handler in `App\Form\Handler`.**
 
 **Manually :**

@@ -46,13 +46,8 @@ class FormHandlerMaker extends AbstractMaker
      */
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        if(!$input->hasArgument("form-type") or !class_exists($input->getArgument("form-type"))) {
+        if(!class_exists($input->getArgument("form-type"))) {
             $question = new Question("Enter the form type class attach to this handler (e.g. <fg=yellow>FooType</>)");
-            $question->setValidator(function ($answer) {
-                return Validator::classExists($answer);
-            });
-            $question->setMaxAttempts(3);
-
             $input->setArgument('form-type', $io->askQuestion($question));
         }
     }
@@ -62,7 +57,7 @@ class FormHandlerMaker extends AbstractMaker
      */
     public function configureDependencies(DependencyBuilder $dependencies)
     {
-        // TODO: Implement configureDependencies() method.
+        return [];
     }
 
     /**

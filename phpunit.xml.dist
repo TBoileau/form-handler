@@ -26,6 +26,12 @@
             <directory>./src</directory>
             <exclude>
                 <directory>./src/Tests</directory>
+                <directory>./src/Resources</directory>
+                <directory>./src/Exception</directory>
+                <file>./src/Factory/FormManagerFactoryInterface.php</file>
+                <file>./src/Handler/FormHandlerInterface.php</file>
+                <file>./src/Manager/FormManagerInterface.php</file>
+                <file>./src/Resolver/OptionsResolverInterface.php</file>
             </exclude>
         </whitelist>
     </filter>
