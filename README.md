@@ -1,8 +1,11 @@
 # TBoileauFormHandlerBundle
 
+[![Package version](https://img.shields.io/packagist/v/tboileau/form-handler.svg?style=flat)](https://packagist.org/packages/tboileau/form-handler)
 [![Build Status](https://travis-ci.org/TBoileau/form-handler.svg?branch=master)](https://travis-ci.org/TBoileau/form-handler)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b685be5052504609e68c/maintainability)](https://codeclimate.com/github/TBoileau/form-handler/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b685be5052504609e68c/test_coverage)](https://codeclimate.com/github/TBoileau/form-handler/test_coverage)
+[![License](https://img.shields.io/github/license/TBoileau/form-handler.svg)](https://github.com/TBoileau/form-handler/blob/master/LICENSE)
+
 
 Use this bundle to respect SOLID principles, especially the **Single responsability principle**. You must not put your logic (after a form was submitted) in a controller, because it's not his responsability to do that. A controller must receive a **request** and send a **response**, and nothing else.
 
