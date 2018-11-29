@@ -2,9 +2,9 @@
 
 namespace TBoileau\FormHandlerBundle\Tests\Form\Handler;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Handler\FormHandlerInterface;
 use TBoileau\FormHandlerBundle\Manager\FormManagerInterface;
-use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Tests\Form\Type\TestType;
 
 /**
@@ -17,7 +17,7 @@ class TestHandler implements FormHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function onSuccess(FormManagerInterface $formManager): void
+    public function process(FormManagerInterface $formManager): void
     {
 
     }
@@ -27,7 +27,7 @@ class TestHandler implements FormHandlerInterface
      */
     public function configure(OptionsResolver $resolver)
     {
-        $resolver->setFormType(TestType::class);
+        $resolver->setDefault("form_type", TestType::class);
     }
 
 }

@@ -4,6 +4,7 @@ namespace TBoileau\FormHandlerBundle\Tests\Manager;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -12,11 +13,13 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\RequestHandlerInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use TBoileau\FormHandlerBundle\Event\FormHandlerEvent;
 use TBoileau\FormHandlerBundle\Handler\FormHandlerInterface;
 use TBoileau\FormHandlerBundle\Manager\FormManager;
 use TBoileau\FormHandlerBundle\Manager\FormManagerInterface;
-use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
-use TBoileau\FormHandlerBundle\Tests\Form\Type\TestType;
+use TBoileau\FormHandlerBundle\Store\FormHandlerEvents;
+use TBoileau\FormHandlerBundle\Tests\Form\Handler\TestHandler;
 
 /**
  * Class FormManagerTest
@@ -40,7 +43,7 @@ class FormManagerTest extends TestCase
      */
     public function setUp()
     {
-        $formHandler = $this->createMock(FormHandlerInterface::class);
+        $formHandler = new TestHandler();
 
         $formConfig = $this->createMock(FormConfigInterface::class);
 
@@ -95,21 +98,23 @@ class FormManagerTest extends TestCase
             ->method("create")
             ->willReturn($this->form);
 
-        $optionsResolver = $this->createMock(OptionsResolver::class);
+        $optionsResolver = new OptionsResolver();
 
-        $optionsResolver
-            ->method("getFormType")
-            ->willReturn(TestType::class)
-        ;
+        $formHandler->configure($optionsResolver);
 
-        $this->formManager = new FormManager($formHandler, $formFactory, $optionsResolver);
+        $this->formManager = new FormManager($formHandler, $formFactory, $eventDispatcher, $optionsResolver);
     }
 
-    public function testCreateViewAndForm()
+    public function testAddSubscriber()
     {
-        $this->assertInstanceOf(FormManagerInterface::class, $this->formManager->createForm());
+        $subscriber = $this->createMock(EventSubscriberInterface::class);
 
-        $this->assertInstanceOf(FormView::class, $this->formManager->createView());
+        $this->assertInstanceOf(FormManagerInterface::class, $this->formManager->addEventSubscriber($subscriber));
+    }
+
+    public function testAddListener()
+    {
+        $this->assertInstanceOf(FormManagerInterface::class, $this->formManager->addEventListener(FormHandlerEvents::PRE_CONFIGURE_FORM, function(FormHandlerEvent $formHandlerEvent) { }));
     }
 
     public function testHandle()
@@ -122,6 +127,20 @@ class FormManagerTest extends TestCase
 
         $this->assertInstanceOf(FormManagerInterface::class, $this->formManager->handle($request));
 
-        $this->assertTrue($this->formManager->hasSucceeded());
+        $this->assertTrue($this->formManager->isProcessed());
+    }
+
+    public function testCreateViewAndForm()
+    {
+        $this->assertNull($this->formManager->getData());
+
+        $this->assertInstanceOf(FormHandlerInterface::class, $this->formManager->getFormHandler());
+
+        $this->assertInstanceOf(FormManagerInterface::class, $this->formManager->createForm());
+
+        $this->assertInstanceOf(FormView::class, $this->formManager->createView());
+
+        $this->assertInstanceOf(FormInterface::class, $this->formManager->getForm());
+
     }
 }

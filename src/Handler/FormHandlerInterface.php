@@ -2,8 +2,8 @@
 
 namespace TBoileau\FormHandlerBundle\Handler;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Manager\FormManagerInterface;
-use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
 
 /**
  * Interface FormHandlerInterface
@@ -13,11 +13,11 @@ use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
 interface FormHandlerInterface
 {
     /**
-     * Triggered when the form is submitted and valid
+     * Triggered when the form is submitted and valid, process the logic
      *
      * @param FormManagerInterface $formManager
      */
-    public function onSuccess(FormManagerInterface $formManager): void;
+    public function process(FormManagerInterface $formManager): void;
 
     /**
      * Return the form type class

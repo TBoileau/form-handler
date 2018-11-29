@@ -3,11 +3,11 @@
 namespace TBoileau\FormHandlerBundle\Factory;
 
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use TBoileau\FormHandlerBundle\Handler\FormHandlerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Manager\FormManager;
 use TBoileau\FormHandlerBundle\Manager\FormManagerInterface;
-use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
 
 /**
  * Class FormManagerFactory
@@ -28,14 +28,21 @@ class FormManagerFactory implements FormManagerFactoryInterface
     private $serviceLocator;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * FormManagerFactory constructor.
      * @param FormFactoryInterface $formFactory
      * @param ServiceLocator $serviceLocator
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(FormFactoryInterface $formFactory, ServiceLocator $serviceLocator)
+    public function __construct(FormFactoryInterface $formFactory, ServiceLocator $serviceLocator, EventDispatcherInterface $eventDispatcher)
     {
         $this->formFactory = $formFactory;
         $this->serviceLocator = $serviceLocator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -44,10 +51,10 @@ class FormManagerFactory implements FormManagerFactoryInterface
     public function createFormManager(string $formHandler, $data = null): FormManagerInterface
     {
         if($this->serviceLocator->has($formHandler)) {
-            return new FormManager($this->serviceLocator->get($formHandler), $this->formFactory, new OptionsResolver(), $data);
+            return new FormManager($this->serviceLocator->get($formHandler), $this->formFactory, $this->eventDispatcher, new OptionsResolver(), $data);
         }
 
-        return new FormManager(new $formHandler(), $this->formFactory, new OptionsResolver(), $data);
+        return new FormManager(new $formHandler(), $this->formFactory, $this->eventDispatcher, new OptionsResolver(), $data);
     }
 
 }

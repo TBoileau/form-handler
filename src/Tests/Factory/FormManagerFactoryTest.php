@@ -4,11 +4,12 @@ namespace TBoileau\FormHandlerBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Factory\FormManagerFactory;
 use TBoileau\FormHandlerBundle\Handler\FormHandlerInterface;
 use TBoileau\FormHandlerBundle\Manager\FormManagerInterface;
-use TBoileau\FormHandlerBundle\Resolver\OptionsResolver;
 use TBoileau\FormHandlerBundle\Tests\Form\Handler\TestHandler;
 
 /**
@@ -24,9 +25,9 @@ class FormManagerFactoryTest extends TestCase
 
         $handler = $this->createMock(FormHandlerInterface::class);
 
-        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
 
-        $optionsResolver = $this->createMock(OptionsResolver::class);
+        $serviceLocator = $this->createMock(ServiceLocator::class);
 
         $serviceLocator
             ->method("has")
@@ -38,13 +39,13 @@ class FormManagerFactoryTest extends TestCase
             ->willReturn($handler)
         ;
 
-        $formManager = new FormManagerFactory($formFactory, $serviceLocator, $optionsResolver);
+        $formManager = new FormManagerFactory($formFactory, $serviceLocator, $dispatcher);
 
         $this->assertInstanceOf(FormManagerInterface::class, $formManager->createFormManager(""));
 
         $serviceLocator = $this->createMock(ServiceLocator::class);
 
-        $formManager = new FormManagerFactory($formFactory, $serviceLocator);
+        $formManager = new FormManagerFactory($formFactory, $serviceLocator, $dispatcher);
 
         $this->assertInstanceOf(FormManagerInterface::class, $formManager->createFormManager(TestHandler::class));
     }

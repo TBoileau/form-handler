@@ -5,8 +5,3 @@ services:
         arguments:
             - '@form.factory'
             -
-
-    TBoileau\FormHandlerBundle\Maker\FormHandlerMaker:
-        arguments: ["@maker.file_manager"]
-        tags:
-            - { name: maker.command }

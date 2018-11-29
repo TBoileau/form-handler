@@ -2,8 +2,11 @@
 
 namespace TBoileau\FormHandlerBundle\Manager;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
+use TBoileau\FormHandlerBundle\Handler\FormHandlerInterface;
 
 /**
  * Interface FormManagerInterface
@@ -12,6 +15,28 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface FormManagerInterface
 {
+
+    /**
+     * Get form data
+     *
+     * @return mixed|null
+     */
+    public function getData();
+
+    /**
+     * Get form handler
+     *
+     * @return FormHandlerInterface
+     */
+    public function getFormHandler(): FormHandlerInterface;
+
+    /**
+     * Get form
+     *
+     * @return FormInterface|null
+     */
+    public function getForm(): ?FormInterface;
+
     /**
      * Create form view
      *
@@ -27,11 +52,11 @@ interface FormManagerInterface
     public function createForm(): FormManagerInterface;
 
     /**
-     * Form handler has succeeded to handle the form
+     * Check if the form handler has been processed
      *
      * @return bool
      */
-    public function hasSucceeded(): bool;
+    public function isProcessed(): bool;
 
     /**
      * Handle form
@@ -40,4 +65,21 @@ interface FormManagerInterface
      * @return FormManagerInterface
      */
     public function handle(Request $request): FormManagerInterface;
+
+    /**
+     * Add event listener
+     *
+     * @param string $event
+     * @param callable $listener
+     * @return FormManagerInterface
+     */
+    public function addEventListener(string $event, callable $listener): FormManagerInterface;
+
+    /**
+     * Add event subscriber
+     *
+     * @param EventSubscriberInterface $eventSubscriber
+     * @return FormManagerInterface
+     */
+    public function addEventSubscriber(EventSubscriberInterface $eventSubscriber): FormManagerInterface;
 }
