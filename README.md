@@ -4,6 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b685be5052504609e68c/maintainability)](https://codeclimate.com/github/TBoileau/form-handler/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b685be5052504609e68c/test_coverage)](https://codeclimate.com/github/TBoileau/form-handler/test_coverage)
 
+Use this bundle to respect SOLID principles, especially the **Single responsability principle**. You must not put your logic (after a form was submitted) in a controller, because it's not his responsability to do that. A controller must receive a **request** and send a **response**, and nothing else.
+
 ## Installation
 
 ### Step 1: Download the Bundle
@@ -85,6 +87,32 @@ class FooHandler implements FormHandlerInterface
 }
 ```
 
+## Configure your handler
+
+The `OptionsResolver` in `configure` allows to set your form type class, and the form's options.
+
+```php
+<?php
+// src/Form/Handler/FooHandler.php
+
+    // ...
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function configure(OptionsResolver $options)
+    {
+        $options->setFormType(FooType::class);
+        
+        $options->setFormOptions([
+            "foo" => "bar"
+        });
+    }
+    
+    // ...
+}
+```
+
 ## Inject service in your form handler
 
 If you need to inject some services in your form handler, you must to define your form handler in `config/services.yaml` and tag your new service with `tboileau.form_handler.handler`.
@@ -161,6 +189,51 @@ services:
   
     # ...
 ```
+
+## Example in controller
+
+To use your form handler, you need to inject in your controller the `FormManagerFactoryInterface`, and create a `FormManager` with your form handler in argument.
+
+See an example :
+
+```php
+<?php
+// src/Controller/DefaultController.php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use TBoileau\FormHandlerBundle\Factory\FormManagerFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\Handler\FooHandler;
+
+class DefaultController extends AbstractController
+{
+    /**
+     * @Route("/", name="default")
+     */
+    public function index(FormManagerFactoryInterface $formManagerFactory, Request $request)
+    {
+        $foo = new Foo();
+        // We create a new FormManager with our FooHandler and a new Foo instance.
+        // Handle the request
+        $formManager = $formManagerFactory->createFormManager(FooHandler::class, $foo)->handle($request);
+        
+        // If the manager has tested the validity of the form and processed your logic
+        if($formManager->hasSucceeded()) {
+            // Put your logic here, like a redirection
+        }
+        
+        return $this->render('default/index.html.twig', [
+            // createView is just a shortcut of form's createView method
+            'form' => $formManager->createView(),
+        ]);
+    }
+}
+```
+
+You need to pass your handler class in first argument of `createFormManager`, and your data in he second argument.
 
 ## Tests
 
