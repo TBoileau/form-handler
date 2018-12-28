@@ -4,4 +4,5 @@ services:
         class: TBoileau\FormHandlerBundle\Factory\FormManagerFactory
         arguments:
             - '@form.factory'
-            -
+            - '@event_dispatcher'
+            - 
