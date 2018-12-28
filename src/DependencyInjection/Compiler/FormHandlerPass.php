@@ -42,7 +42,7 @@ class FormHandlerPass implements CompilerPassInterface
     {
         $definition = $container->getDefinition($this->formManagerFactory);
 
-        $definition->replaceArgument(1, $this->processFormHandler($container));
+        $definition->replaceArgument(2, $this->processFormHandler($container));
     }
 
     /**
