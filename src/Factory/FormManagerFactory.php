@@ -35,10 +35,10 @@ class FormManagerFactory implements FormManagerFactoryInterface
     /**
      * FormManagerFactory constructor.
      * @param FormFactoryInterface $formFactory
-     * @param ServiceLocator $serviceLocator
      * @param EventDispatcherInterface $eventDispatcher
+     * @param ServiceLocator $serviceLocator
      */
-    public function __construct(FormFactoryInterface $formFactory, ServiceLocator $serviceLocator, EventDispatcherInterface $eventDispatcher)
+    public function __construct(FormFactoryInterface $formFactory, EventDispatcherInterface $eventDispatcher, ServiceLocator $serviceLocator)
     {
         $this->formFactory = $formFactory;
         $this->serviceLocator = $serviceLocator;
