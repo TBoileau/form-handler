@@ -12,7 +12,7 @@
         "symfony/event-dispatcher": ">=4.1"
     },
     "require-dev": {
-        "symfony/framework-bundle": ">=4.1*",
+        "symfony/framework-bundle": ">=4.1",
         "symfony/phpunit-bridge": ">=4.1",
         "codeclimate/php-test-reporter": "^0.3.0@dev",
         "symfony/maker-bundle": "^1.0@dev"
@@ -20,7 +20,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Thomas Boileai",
+            "name": "Thomas Boileau",
             "email": "t-boileau@email.com"
         }
     ],
